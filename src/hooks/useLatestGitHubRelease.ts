@@ -23,9 +23,6 @@ import { AlephiumWindow } from '../types/window'
 import { AppMetaData, KEY_APPMETADATA, toAppMetaData } from '../utils/app-data'
 import { useTimeout } from '../utils/hooks'
 
-const _window = window as unknown as AlephiumWindow
-const electron = _window.electron
-
 const currentVersion = import.meta.env.VITE_VERSION
 const semverRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)?$/
 
@@ -40,17 +37,32 @@ const useLatestGitHubRelease = () => {
     const { lastVersionCheckedAt } = appData
     // Uncomment to test updater every time the app launches
     // const lastVersionCheckedAt = new Date(0)
+
+    console.log('lastVersionCheckedAt', lastVersionCheckedAt)
+    console.log('Date.now() - lastVersionCheckedAt.getTime()', Date.now() - lastVersionCheckedAt.getTime())
+
     const timeSinceLastCheck = (lastVersionCheckedAt !== undefined && Date.now() - lastVersionCheckedAt.getTime()) || 0
     const nextTimeUntilNextFetch = Math.max(0, ONE_HOUR - timeSinceLastCheck)
+
+    console.log('timeSinceLastCheck', timeSinceLastCheck)
+    console.log('nextTimeUntilNextFetch', nextTimeUntilNextFetch)
 
     if (timeUntilNextFetch === 0 && nextTimeUntilNextFetch !== 0 && lastVersionCheckedAt !== undefined) {
       setTimeUntilNextFetch(nextTimeUntilNextFetch)
       return
     }
 
+    const _window = window as unknown as AlephiumWindow
+    const electron = _window.electron
+
+    console.log('electron', electron)
+
     const version = await electron?.updater.checkForUpdates()
 
+    console.log('version', version)
+
     if (version && semverRegex.test(version) && currentVersion && compareVersions(version, currentVersion) > 0) {
+      console.log('needs to update to: ', version)
       setNewLatestRelease(version)
     }
 
