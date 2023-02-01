@@ -23,6 +23,9 @@ import { AlephiumWindow } from '../types/window'
 import { AppMetaData, KEY_APPMETADATA, toAppMetaData } from '../utils/app-data'
 import { useTimeout } from '../utils/hooks'
 
+const _window = window as unknown as AlephiumWindow
+const electron = _window.electron
+
 const currentVersion = import.meta.env.VITE_VERSION
 const semverRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)?$/
 
@@ -52,12 +55,13 @@ const useLatestGitHubRelease = () => {
       return
     }
 
-    const _window = window as unknown as AlephiumWindow
-    const electron = _window.electron
-
     console.log('electron', electron)
 
-    const version = await electron?.updater.checkForUpdates()
+    const result = await electron?.updater.checkForUpdates()
+
+    console.log('checkForUpdates() result: ', result)
+
+    const version = result?.updateInfo?.version
 
     console.log('version', version)
 

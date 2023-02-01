@@ -214,11 +214,12 @@ if (!gotTheLock) {
       })
     )
 
-    ipcMain.handle('updater:checkForUpdates', async () => {
-      const result = await autoUpdater.checkForUpdates()
+    ipcMain.handle(
+      'updater:checkForUpdates',
+      async () => await autoUpdater.checkForUpdates()
 
-      return result?.updateInfo?.version
-    })
+      // return result?.updateInfo?.version
+    )
 
     ipcMain.handle('updater:startUpdateDownload', () => autoUpdater.downloadUpdate())
 

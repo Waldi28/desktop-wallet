@@ -34,7 +34,8 @@ export interface AlephiumWindow extends Window {
       onShouldUseDarkColors: (callback: (useDark: boolean) => void) => () => void
     }
     updater: {
-      checkForUpdates: () => Promise<string>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      checkForUpdates: () => Promise<any>
       startUpdateDownload: () => void
       onUpdateDownloadProgress: (callback: (info: ProgressInfo) => void) => () => void
       onUpdateDownloaded: (callback: (updateDownloadedEvent: UpdateDownloadedEvent) => void) => () => void
