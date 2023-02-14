@@ -17,6 +17,9 @@ along with the library. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import 'dayjs/locale/fr'
+import 'dayjs/locale/de'
+import 'dayjs/locale/vi'
+import 'dayjs/locale/tr'
 
 import dayjs from 'dayjs'
 import { AnimatePresence } from 'framer-motion'

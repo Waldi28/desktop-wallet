@@ -35,8 +35,9 @@ import CenteredModal from '../CenteredModal'
 const languageOptions = [
   { label: 'English', value: 'en-US' as Language },
   { label: 'Français', value: 'fr-FR' as Language },
+  { label: 'Deutsch', value: 'de-DE' as Language },
   { label: 'Tiếng Việt', value: 'vi-VN' as Language },
-  { label: 'Deutsch', value: 'de-DE' as Language }
+  { label: 'Türkçe', value: 'tr-TR' as Language }
 ]
 
 const themeOptions = [
