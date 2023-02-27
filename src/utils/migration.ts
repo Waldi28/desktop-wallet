@@ -71,6 +71,7 @@ export const migrateNetworkSettings = (): NetworkSettings => {
 
   _v140_networkSettingsMigration()
   _v150_networkSettingsMigration()
+  _v200_networkSettingsMigration()
 
   return SettingsStorage.load('network') as NetworkSettings
 }
@@ -190,6 +191,10 @@ export const _v150_networkSettingsMigration = () => {
 
   const newNetworkSettings = merge({}, defaultSettings.network, migratedNetworkSettings)
   SettingsStorage.store('network', newNetworkSettings)
+}
+
+export const _v200_networkSettingsMigration = () => {
+  // TODO: Implement after merging master into v2.0 and write tests
 }
 
 // Instead of storing the wallet as a JSON stringified string, simply store a string
