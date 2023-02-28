@@ -53,10 +53,10 @@ const App = () => {
   const pendingTxHashes = useAppSelector((s) => selectAddressesPendingTransactions(s, addressHashes)).map(
     (tx) => tx.address.hash
   )
-  const [settings, network, addressesStatus, isPassphraseUsed, tokens] = useAppSelector((s) => [
-    s.settings,
+  const [network, addressesStatus, theme, isPassphraseUsed, tokens] = useAppSelector((s) => [
     s.network,
     s.addresses.status,
+    s.app.theme,
     s.activeWallet.isPassphraseUsed,
     s.tokens
   ])
@@ -140,7 +140,7 @@ const App = () => {
   }, [newVersionDownloadTriggered])
 
   return (
-    <ThemeProvider theme={settings.theme === 'light' ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <GlobalStyle />
 
       {splashScreenVisible && <SplashScreen onSplashScreenShown={() => setSplashScreenVisible(false)} />}
