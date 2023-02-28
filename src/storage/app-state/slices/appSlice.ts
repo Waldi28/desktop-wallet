@@ -22,6 +22,7 @@ import { languageChangeFinished, languageChangeStarted } from '@/storage/app-sta
 import { activeWalletDeleted, walletLocked, walletSaved } from '@/storage/app-state/slices/activeWalletSlice'
 import { addressDiscoveryFinished, addressDiscoveryStarted } from '@/storage/app-state/slices/addressesSlice'
 import WalletStorage from '@/storage/persistent-storage/walletPersistentStorage'
+import { StoredWallet } from '@/types/wallet'
 
 const sliceName = 'app'
 
@@ -29,14 +30,14 @@ interface AppState {
   loading: boolean
   visibleModals: string[]
   addressesPageInfoMessageClosed: boolean
-  storedWalletNames: string[]
+  wallets: StoredWallet[]
 }
 
 const initialState: AppState = {
   loading: false,
   visibleModals: [],
   addressesPageInfoMessageClosed: false,
-  storedWalletNames: WalletStorage.list()
+  wallets: WalletStorage.list()
 }
 
 const appSlice = createSlice({
@@ -58,9 +59,12 @@ const appSlice = createSlice({
       state.addressesPageInfoMessageClosed = true
     },
     walletDeleted: (state, action: PayloadAction<string>) => {
-      const deletedWalletName = action.payload
+      const deletedWalletId = action.payload
 
-      state.storedWalletNames = state.storedWalletNames.filter((walletName) => walletName !== deletedWalletName)
+      state.wallets = state.wallets.filter(({ id }) => id !== deletedWalletId)
+    },
+    localStorageDataMigrated: (state) => {
+      state.wallets = WalletStorage.list()
     }
   },
   extraReducers(builder) {
@@ -75,19 +79,25 @@ const appSlice = createSlice({
       })
       .addCase(walletLocked, () => initialState)
       .addCase(walletSaved, (state, action) => {
-        const newWallet = action.payload.wallet
+        const { id, name, encrypted } = action.payload.wallet
 
-        state.storedWalletNames.push(newWallet.name)
+        state.wallets.push({ id, name, encrypted })
       })
       .addCase(activeWalletDeleted, () => ({
         ...initialState,
-        storedWalletNames: WalletStorage.list()
+        wallets: WalletStorage.list()
       }))
   }
 })
 
-export const { appLoadingToggled, modalOpened, modalClosed, addressesPageInfoMessageClosed, walletDeleted } =
-  appSlice.actions
+export const {
+  appLoadingToggled,
+  modalOpened,
+  modalClosed,
+  addressesPageInfoMessageClosed,
+  walletDeleted,
+  localStorageDataMigrated
+} = appSlice.actions
 
 export default appSlice
 
